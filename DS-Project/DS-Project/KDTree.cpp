@@ -1,17 +1,32 @@
 #include "KDTree.h"
 #include<conio.h>
-void KDTree::insert(int Input_x, int Input_y, string name)
+#include <algorithm>
+#include <cmath>
+component* KDTree::getHead()
 {
-
-	component KDComponent;
+	return HeadTree;
+}
+component* Minimum(component* root)
+{
+	component* current = root;
+	while (current->left != nullptr)
+	{
+		current = current->left;
+	}
+	return current;
+}
+void KDTree::insert(float Input_x, float Input_y, string name)
+{
+	component* KDComponent = new component;
 	char LorR = '0';
-	KDComponent.Push(Input_x, Input_y, name);
+	KDComponent->Push(Input_x, Input_y, name);
 	if (!Root) // Determine if the root (in other words Tree ) exists
 	{
-		KDComponent.determination = 'x';
-		*HeadTree = KDComponent;//Save The Head Of Tree
+		KDComponent->determination = 'x';
+		HeadTree = new component;
+		HeadTree = KDComponent;//Save The Head Of Tree
+		HeadTree->LorR = '0';
 		Root = true;
-		system("cls");
 		return;
 	}
 	component* TravelingComponent = HeadTree;
@@ -20,7 +35,7 @@ void KDTree::insert(int Input_x, int Input_y, string name)
 	{
 		if (TravelingComponent->determination == 'x')
 		{
-			if (KDComponent.x < TravelingComponent->x)
+			if (KDComponent->x < TravelingComponent->x)
 			{
 				Temp = TravelingComponent;
 				LorR = 'L';
@@ -37,7 +52,7 @@ void KDTree::insert(int Input_x, int Input_y, string name)
 		}
 		else if (TravelingComponent->determination == 'y')
 		{
-			if (KDComponent.y < TravelingComponent->y)
+			if (KDComponent->y < TravelingComponent->y)
 			{
 				Temp = TravelingComponent;
 				LorR = 'L';
@@ -53,20 +68,215 @@ void KDTree::insert(int Input_x, int Input_y, string name)
 			}
 		}
 	}
-	
-	if (determination == 'x')
-		KDComponent.determination = 'y';
+
+	if (determination == 'x')//Determine whether to compare at each level through x or through y
+		KDComponent->determination = 'y';
 	else
-		KDComponent.determination = 'x';
-	if (LorR == 'L')
+		KDComponent->determination = 'x';
+	if (LorR == 'L') //Determining whether the child is left or right
 	{
 		Temp->left = new component;
-		*Temp->left = KDComponent;
+		KDComponent->LorR = 'L';
+		Temp->left = KDComponent;
+		KDComponent->parent = Temp;
 	}
 	if (LorR == 'R')
 	{
 		Temp->right = new component;
-		*Temp->right = KDComponent;
+		KDComponent->LorR = 'R';
+		Temp->right = KDComponent;
+		KDComponent->parent = Temp;
 	}
-	system("cls");
+	return;
+}
+component* KDTree::findNearestNeighbor(component* root, component* target, component* best, double& best_dist, bool split)
+{
+	if (root == nullptr) {
+		return best;
+	}
+
+	double dist = sqrt(pow(root->x - target->x, 2) + pow(root->y - target->y, 2));
+
+	if (dist < best_dist) {
+		best = root;
+		best_dist = dist;
+	}
+
+	component* near = root->left;
+	component* far = root->right;
+
+	if ((!split && target->y >= root->y) || (split && target->x >= root->x)) {
+		std::swap(near, far);
+	}
+
+	best = findNearestNeighbor(near, target, best, best_dist, !split);
+
+	if ((split && pow(target->x - root->x, 2) < best_dist) || (!split && pow(target->y - root->y, 2) < best_dist)) {
+		best = findNearestNeighbor(far, target, best, best_dist, !split);
+	}
+
+	return best;
+}
+bool KDTree::Search(component* root, component* target)
+{
+	component* current = root;
+
+	while (current != nullptr) {
+		if (current->x == target->x && current->y == target->y) {
+			return true;
+		}
+
+		if (target->x < current->x || (target->x == current->x && target->y < current->y)) {
+			current = current->left;
+		}
+		else {
+			current = current->right;
+		}
+	}
+
+	return false;
+}
+component* KDTree::ReferComponent(float x, float y)
+{
+	component* current = HeadTree;
+
+	while (current != nullptr) {
+		if (current->x == x && current->y == y) {
+			return current;
+		}
+
+		if (x < current->x || (x == current->x && y < current->y)) {
+			current = current->left;
+		}
+		else {
+			current = current->right;
+		}
+	}
+	return nullptr;
+}
+void updateDetermination(component* root, char newDetermination) {
+	if (root == NULL) {
+		return;
+	}
+
+	root->determination = newDetermination;
+	updateDetermination(root->left, (newDetermination == 'x' ? 'y' : 'x'));
+	updateDetermination(root->right, (newDetermination == 'x' ? 'y' : 'x'));
+}
+void KDTree::Delete(component* target)
+{
+	component* current = ReferComponent(target->x, target->y);
+	if (current == nullptr)
+	{
+		cout << "Not Found ! \a" << endl;
+		return;
+	}
+	else if (current->left == nullptr && current->right == nullptr) // Target is  a Leaf
+	{
+		if (current->LorR == 'R')
+			current->parent->right = nullptr;
+		else
+			current->parent->left == nullptr;
+	}
+	else if (current->left == nullptr && current->right != nullptr)
+	{
+		if (current->LorR == 'R')
+		{
+			current->parent->right = current->right;
+			current->right->parent = current->parent;
+			if (current->determination == 'x')
+				current->right->determination = 'x';
+			else
+				current->right->determination = 'y';
+		}
+		else
+		{
+			current->parent->left = current->right;
+			current->right->parent = current->parent;
+			if (current->determination == 'x')
+				current->right->determination = 'x';
+			else
+				current->right->determination = 'y';
+		}
+
+	}
+	else if (current->left != nullptr && current->right == nullptr)
+	{
+		if (current->LorR == 'R')
+		{
+			current->parent->right = current->left;
+			current->left->parent = current->parent;
+			if (current->determination == 'x')
+				current->left->determination = 'x';
+			else
+				current->left->determination = 'y';
+		}
+		else
+		{
+			current->parent->left = current->left;
+			current->left->parent = current->parent;
+			if (current->determination == 'x')
+				current->left->determination = 'x';
+			else
+				current->left->determination = 'y';
+		}
+	}
+	else
+	{
+
+		component* minimum = Minimum(current->right);
+		if (current->right == minimum)
+		{
+
+			minimum->parent = current->parent;
+			current->parent->right = minimum;
+			minimum->left = current->left;
+			if (current->determination == 'x')
+				minimum->determination = 'x';
+			else
+				minimum->determination = 'y';
+			if (current->LorR == 'R')
+				minimum->LorR = 'R';
+			else
+				minimum->LorR = 'R';
+			delete current;
+			return;
+		}
+		if (minimum->right != nullptr)
+		{
+			minimum->right->parent = minimum->parent;
+			minimum->parent->left = minimum->right;
+			updateDetermination(minimum->right, minimum->determination);
+			minimum->left = current->left;
+			current->left->parent = minimum;
+			minimum->parent = current->parent;
+			current->parent->right = minimum;
+			minimum->right = current->right;
+			current->right->parent = minimum;
+			if (current->determination == 'x')
+				minimum->determination = 'x';
+			else
+				minimum->determination = 'y';
+			if (current->LorR == 'R')
+				minimum->LorR = 'R';
+			else
+				minimum->LorR = 'R';
+		}
+		else if (minimum->right == nullptr)
+		{
+			minimum->parent = current->parent;
+			current->parent->right = minimum;
+			minimum->left = current->left;
+			minimum->right = current->right;
+			if (current->determination == 'x')
+				minimum->determination = 'x';
+			else
+				minimum->determination = 'y';
+		}
+		if (current->LorR == 'R')
+			minimum->LorR = 'R';
+		else
+			minimum->LorR = 'R';
+	}
+	delete current;
 }

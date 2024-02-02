@@ -5,10 +5,13 @@ class component
 {
 public:
 	string name;
-	int x; int y;
+	float x; float y; 
 	component* left;
 	component* right;
-	char determination = '0';
-	void Push(int x, int y, string name);
+	component* parent; 
+	char LorR;
+	bool IsMain; 
+	char determination = '0';//Specifies whether to check x or y to add each node 
+	void Push(float x, float y, string name);
 };
 
