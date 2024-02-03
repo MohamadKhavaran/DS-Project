@@ -15,6 +15,19 @@ component* Minimum(component* root)
 	}
 	return current;
 }
+void findNodesWithName(component* currentNode, string targetName, list<component*>& components) {
+	if (currentNode == nullptr) {
+		return;
+	}
+
+	if (currentNode->MainBrancheName == targetName)
+	{
+		components.push_back(currentNode);
+	}
+
+	findNodesWithName(currentNode->left, targetName, components);
+	findNodesWithName(currentNode->right, targetName, components);
+}
 void KDTree::insert(float Input_x, float Input_y, string name, bool isMain, string MainBrancheName)
 {
 	component* KDComponent = new component;
@@ -298,8 +311,7 @@ component* KDTree::ReferComponentByName(string name)
 	}
 	return nullptr;
 }
-
-int countComponentsWithName(component* root, string name)
+int KDTree::countComponentsWithName(component* root, string name)
 {
 	if (root == nullptr) {
 		return 0;
@@ -312,16 +324,59 @@ int countComponentsWithName(component* root, string name)
 
 	return count + countComponentsWithName(root->left, name) + countComponentsWithName(root->right, name);
 }
-string KDTree::MostBrs()
+void KDTree::MostBrs()
 {
 	if (HeadTree == nullptr)
 	{
-		return " There Are No Points In This Tree"; 
+		cout << " \aThere Are No Points In This Tree !";
+		return;
 	}
 	list<int> CountBranches;
 	for (auto value : MainPointCopmonents)
 	{
-		CountBranches.push_back((countComponentsWithName(HeadTree, value->name))-1);  
+		CountBranches.push_back((countComponentsWithName(HeadTree, value->name)) - 1);
 	}
-		
+	bool swapped = true;
+	while (swapped) {
+		swapped = false;
+		auto it = CountBranches.begin();
+		auto next = std::next(it);
+		while (next != CountBranches.end()) {
+			if (*it > *next) {
+				std::swap(*it, *next);
+				swapped = true;
+			}
+			it++;
+			next++;
+		}
 	}
+	component* MostBrs = new component;
+	auto LastElementIterator = CountBranches.end();
+	LastElementIterator--;
+	int n = 0;
+	for (auto Value : MainPointCopmonents)
+	{
+		n = countComponentsWithName(HeadTree, Value->name) - 1;
+		if (n == *LastElementIterator)
+		{
+			MostBrs = Value;
+			break;
+		}
+	}
+	cout << "Point : " << "(" << MostBrs->x << "," << MostBrs->y << ")" << " Has " << *(LastElementIterator) << " Branches . " << endl;
+	return;
+}
+void KDTree::ListBrs(string MainBrancheName)
+{
+	list<component*> Branches;
+	findNodesWithName(HeadTree, MainBrancheName, Branches);
+	cout << "The Branches Are : \n" << endl;
+	auto ItStart = Branches.begin();
+	ItStart++; 
+	while (ItStart!=Branches.end())
+	{
+		cout << "(" << (*ItStart)->x << "," << (*ItStart)->y << ")" << endl;
+		ItStart++;
+	}
+	return;
+}

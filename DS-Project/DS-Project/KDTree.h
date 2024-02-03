@@ -5,9 +5,9 @@ class KDTree
 {
 	component* HeadTree = nullptr;
 	char determination = '0';// An attribute that holds x or y of the parent level
-	int countComponentsWithName(component* root, string name); 
+	int countComponentsWithName(component* root, string name);
 public:
-	list<component*>MainPointCopmonents; 
+	list<component*>MainPointCopmonents;
 	bool Root = false;
 	void insert(float x, float y, string name, bool isMain, string MainBrancheName);
 	component* getHead();
@@ -15,7 +15,8 @@ public:
 	bool Search(component* root, component* target);
 	component* ReferComponent(float x, float y);
 	void Delete(component* target);
-	component* ReferComponentByName(string name); 
-	string MostBrs();
+	component* ReferComponentByName(string name);
+	void MostBrs();
+	void ListBrs(string MainBrancheName); 
 };
 
