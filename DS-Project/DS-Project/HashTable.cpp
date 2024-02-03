@@ -36,3 +36,15 @@ void HashTable::deleteItem(string key) {
 		table[index].erase(i);
 	}
 }
+
+
+bool HashTable::searchItem(string key){
+	int index = hashFunction(key);
+
+	for(auto input : table[index]){
+		if(input.name==key)
+			return true;
+	}
+	
+	return false;
+}
