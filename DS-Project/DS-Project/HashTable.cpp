@@ -2,7 +2,7 @@
 
 HashTable::HashTable(int size) {
 	this->size = size;
-	table = new list<pizzaStoreInfo>[size];
+	table = new list<zoneName>[size];
 }
 
 
@@ -17,7 +17,7 @@ int HashTable::hashFunction(string key) {
 }
 
 
-void HashTable::insertItem(string key, pizzaStoreInfo value) {
+void HashTable::insertItem(string key, zoneName value) {
 	int index = hashFunction(key);
 	table[index].push_back(value);
 }
@@ -26,7 +26,7 @@ void HashTable::insertItem(string key, pizzaStoreInfo value) {
 
 void HashTable::deleteItem(string key) {
 	int index = hashFunction(key);
-	list<pizzaStoreInfo> ::iterator i;
+	list<zoneName> ::iterator i;
 	for (i = table[index].begin(); i != table[index].end(); i++) {
 		if ((*i).name == key) {
 			break;
