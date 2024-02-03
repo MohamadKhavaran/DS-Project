@@ -1,3 +1,9 @@
-﻿  KDTree.cpp
-C:\Users\Modern\Documents\GitHub\DS-Project\DS-Project\DS-Project\KDTree.cpp(179,26): warning C4553: '==': result of expression not used; did you intend '='?
-  DS-Project.vcxproj -> C:\Users\Modern\Documents\GitHub\DS-Project\DS-Project\x64\Debug\DS-Project.exe
+﻿  component.cpp
+  HashTable.cpp
+  KDTree.cpp
+C:\Users\Modern\Documents\GitHub\DS-Project\DS-Project\DS-Project\KDTree.cpp(188,26): warning C4553: '==': result of expression not used; did you intend '='?
+  main.cpp
+  Generating Code...
+C:\Users\Modern\Documents\GitHub\DS-Project\DS-Project\DS-Project\KDTree.cpp(327): warning C4715: 'KDTree::MostBrs': not all control paths return a value
+KDTree.obj : error LNK2019: unresolved external symbol "private: int __cdecl KDTree::countComponentsWithName(class component *,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?countComponentsWithName@KDTree@@AEAAHPEAVcomponent@@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl KDTree::MostBrs(void)" (?MostBrs@KDTree@@QEAA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ)
+C:\Users\Modern\Documents\GitHub\DS-Project\DS-Project\x64\Debug\DS-Project.exe : fatal error LNK1120: 1 unresolved externals

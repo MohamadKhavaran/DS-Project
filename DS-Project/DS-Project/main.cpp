@@ -1,6 +1,7 @@
 #include<iostream>
 #include"KDTree.h"
 #include<conio.h>
+#include<list>
 using namespace std;
 
 int main()
@@ -32,19 +33,8 @@ flag:
 	//	}
 	//	goto flag;
 	//}
-	if (inputValue == "Search")
-	{
-		system("cls");
-		cout << "Please Enter The X Coordinate : " << endl;
-		cin >> x;
-		cout << "Please Enter The Y Coordinate : " << endl;
-		cin >> y;
-		component* IsExsist = new component;
-		IsExsist->x = x;
-		IsExsist->y = y;
-		kdTree.Search(kdTree.getHead(), IsExsist);
-	}
-	else if (inputValue == "Add-P") // Add  Pizzeria
+
+	if (inputValue == "Add-P") // Add  Pizzeria
 	{
 		system("cls");
 		cout << "Please Enter The Pizzeria Name : " << endl;
@@ -55,7 +45,7 @@ flag:
 		cin >> x;
 		cout << "Please Enter The Y Coordinate : " << endl;
 		cin >> y;
-		/*component* IsExsist = new component;
+		component* IsExsist = new component;
 		IsExsist->x = x;
 		IsExsist->y = y;
 		if (kdTree.Search(kdTree.getHead(), IsExsist) && kdTree.getHead() != nullptr)
@@ -64,13 +54,54 @@ flag:
 			cout << "Press Any Key ..." << endl;
 			_getch();
 			goto flag;
-		}*/
-		//else
-		//{
-			kdTree.insert(x, y, name);
+		}
+		else
+		{
+			//kdTree.MainPoints.push_back(name);
+			kdTree.insert(x, y, name, true, name);
 
 			goto flag;
-		//}
+		}
+	}
+	else if (inputValue == "Add-Br") // Add  Pizzeria
+	{
+		string mainBranchName;
+		system("cls");
+		cout << "Please Enter The Pizzeria Name : " << endl;
+		cin >> name;
+		cout << "Please Enter The Main branch Name : " << endl;
+		cin >> mainBranchName;
+		if (kdTree.ReferComponentByName(mainBranchName) == nullptr)
+		{
+			system("cls");
+			cout << "This Point Does Not Exist Or The Point Selected As The Main Branch Is Itself A Sub Branch  ! \a\n\n" << endl;
+			cout << "Press Any Key ..." << endl;
+			_getch();
+			goto flag;
+		}
+
+		system("cls");
+
+		cout << "Please Enter The X Coordinate : " << endl;
+		cin >> x;
+		cout << "Please Enter The Y Coordinate : " << endl;
+		cin >> y;
+		component* IsExsist = new component;
+		IsExsist->x = x;
+		IsExsist->y = y;
+		if (kdTree.Search(kdTree.getHead(), IsExsist) && kdTree.getHead() != nullptr)
+		{
+			cout << "This Point Already Exists ! \a\n\n" << endl;
+			cout << "Press Any Key ..." << endl;
+			_getch();
+			goto flag;
+		}
+		else
+		{
+			kdTree.insert(x, y, name, false, mainBranchName);
+
+			goto flag;
+		}
 	}
 	else if (inputValue == "Near-P")
 	{
@@ -107,6 +138,10 @@ flag:
 		cout << "Press Any Key ..." << endl;
 		_getch();
 		goto flag;
+	}
+	else if (inputValue == "Most-Brs")
+	{
+
 	}
 	else
 	{

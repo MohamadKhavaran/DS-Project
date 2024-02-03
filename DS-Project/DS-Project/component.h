@@ -9,6 +9,7 @@ public:
 	component* left;
 	component* right;
 	component* parent; 
+	string MainBrancheName; 
 	char LorR;
 	bool IsMain; 
 	char determination = '0';//Specifies whether to check x or y to add each node 

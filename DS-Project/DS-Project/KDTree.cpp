@@ -15,11 +15,15 @@ component* Minimum(component* root)
 	}
 	return current;
 }
-void KDTree::insert(float Input_x, float Input_y, string name)
+void KDTree::insert(float Input_x, float Input_y, string name, bool isMain, string MainBrancheName)
 {
 	component* KDComponent = new component;
+	KDComponent->MainBrancheName = MainBrancheName;
+	KDComponent->IsMain = isMain;
 	char LorR = '0';
 	KDComponent->Push(Input_x, Input_y, name);
+	if (isMain == true)
+		MainPointCopmonents.push_back(KDComponent); // Save The Main Points For Search By Name
 	if (!Root) // Determine if the root (in other words Tree ) exists
 	{
 		KDComponent->determination = 'x';
@@ -166,6 +170,11 @@ void updateDetermination(component* root, char newDetermination) {
 void KDTree::Delete(component* target)
 {
 	component* current = ReferComponent(target->x, target->y);
+	if (current->IsMain == true)
+	{
+		cout << "This pizzeria is a main branch and you cannot delete it! \a\n\n" << endl;
+		return;
+	}
 	if (current == nullptr)
 	{
 		cout << "Not Found ! \a" << endl;
@@ -280,3 +289,39 @@ void KDTree::Delete(component* target)
 	}
 	delete current;
 }
+component* KDTree::ReferComponentByName(string name)
+{
+	for (auto value : MainPointCopmonents)
+	{
+		if (value->name == name)
+			return value;
+	}
+	return nullptr;
+}
+
+int countComponentsWithName(component* root, string name)
+{
+	if (root == nullptr) {
+		return 0;
+	}
+
+	int count = 0;
+	if (root->MainBrancheName == name) {
+		count = 1;
+	}
+
+	return count + countComponentsWithName(root->left, name) + countComponentsWithName(root->right, name);
+}
+string KDTree::MostBrs()
+{
+	if (HeadTree == nullptr)
+	{
+		return " There Are No Points In This Tree"; 
+	}
+	list<int> CountBranches;
+	for (auto value : MainPointCopmonents)
+	{
+		CountBranches.push_back((countComponentsWithName(HeadTree, value->name))-1);  
+	}
+		
+	}
