@@ -141,12 +141,14 @@
   <ItemGroup>
     <ClCompile Include="component.cpp" />
     <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="HashTable2.cpp" />
     <ClCompile Include="KDTree.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="component.h" />
     <ClInclude Include="HashTable.h" />
+    <ClInclude Include="HashTable2.h" />
     <ClInclude Include="KDTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

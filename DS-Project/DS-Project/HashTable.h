@@ -4,7 +4,7 @@
 
 using namespace std;
 
-struct pizzaStoreInfo {
+struct zoneName {
 	string name;
 };
 
@@ -12,14 +12,14 @@ struct pizzaStoreInfo {
 class HashTable {
 private:
 	int size;
-	list<pizzaStoreInfo>* table;
+	list<zoneName>* table;
 
 public:
 	HashTable(int size);
 
 	int hashFunction(string key);
 
-	void insertItem(string key, pizzaStoreInfo value);
+	void insertItem(string key, zoneName value);
 
 	void deleteItem(string key);
 
