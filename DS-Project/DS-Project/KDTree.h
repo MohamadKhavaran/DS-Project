@@ -7,7 +7,7 @@ class KDTree
 	char determination = '0';// An attribute that holds x or y of the parent level
 	int countComponentsWithName(component* root, string name);
 public:
-	list<component*>MainPointCopmonents;
+	list<component*>MainPointCopmonents;//This attribute stores the main branches.
 	bool Root = false;
 	void insert(float x, float y, string name, bool isMain, string MainBrancheName);
 	component* getHead();

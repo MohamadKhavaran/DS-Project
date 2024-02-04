@@ -15,7 +15,9 @@ component* Minimum(component* root)
 	}
 	return current;
 }
-void findNodesWithName(component* currentNode, string targetName, list<component*>& components) {
+void findNodesWithName(component* currentNode, string targetName, list<component*>& components)
+{
+	//This function is to find all the nodes whose main branch name is the same.
 	if (currentNode == nullptr) {
 		return;
 	}
@@ -30,6 +32,7 @@ void findNodesWithName(component* currentNode, string targetName, list<component
 }
 void KDTree::insert(float Input_x, float Input_y, string name, bool isMain, string MainBrancheName)
 {
+	//This function is for adding nodes to the tree, which can add both sub-branches and main branches.
 	component* KDComponent = new component;
 	KDComponent->MainBrancheName = MainBrancheName;
 	KDComponent->IsMain = isMain;
@@ -108,6 +111,7 @@ void KDTree::insert(float Input_x, float Input_y, string name, bool isMain, stri
 }
 component* KDTree::findNearestNeighbor(component* root, component* target, component* best, double& best_dist, bool split)
 {
+	//This function returns a component that represents the closest node to the target
 	if (root == nullptr) {
 		return best;
 	}
@@ -136,6 +140,7 @@ component* KDTree::findNearestNeighbor(component* root, component* target, compo
 }
 bool KDTree::Search(component* root, component* target)
 {
+	//In this function, we only check whether the target exists in the tree or not
 	component* current = root;
 
 	while (current != nullptr) {
@@ -155,6 +160,7 @@ bool KDTree::Search(component* root, component* target)
 }
 component* KDTree::ReferComponent(float x, float y)
 {
+	//In this function, it returns a component by receiving x and y characteristics
 	component* current = HeadTree;
 
 	while (current != nullptr) {
@@ -171,7 +177,9 @@ component* KDTree::ReferComponent(float x, float y)
 	}
 	return nullptr;
 }
-void updateDetermination(component* root, char newDetermination) {
+void updateDetermination(component* root, char newDetermination)
+{
+	//This function prevents confusion of the determination attribute in each component
 	if (root == NULL) {
 		return;
 	}
@@ -182,6 +190,7 @@ void updateDetermination(component* root, char newDetermination) {
 }
 void KDTree::Delete(component* target)
 {
+	//This function deletes the desired component. Also after deleting the appointment Taking children will be in the right place
 	component* current = ReferComponent(target->x, target->y);
 	if (current->IsMain == true)
 	{
@@ -304,6 +313,7 @@ void KDTree::Delete(component* target)
 }
 component* KDTree::ReferComponentByName(string name)
 {
+	//This function receives the name of a component and returns it
 	for (auto value : MainPointCopmonents)
 	{
 		if (value->name == name)
@@ -313,6 +323,7 @@ component* KDTree::ReferComponentByName(string name)
 }
 int KDTree::countComponentsWithName(component* root, string name)
 {
+	//This function counts the number of all components that share a specific main branch name
 	if (root == nullptr) {
 		return 0;
 	}
@@ -326,6 +337,7 @@ int KDTree::countComponentsWithName(component* root, string name)
 }
 void KDTree::MostBrs()
 {
+	//This function specifies the component that has the largest number of children and also declares the number of its children
 	if (HeadTree == nullptr)
 	{
 		cout << " \aThere Are No Points In This Tree !";
@@ -336,6 +348,7 @@ void KDTree::MostBrs()
 	{
 		CountBranches.push_back((countComponentsWithName(HeadTree, value->name)) - 1);
 	}
+	//bubble sort
 	bool swapped = true;
 	while (swapped) {
 		swapped = false;
@@ -368,12 +381,13 @@ void KDTree::MostBrs()
 }
 void KDTree::ListBrs(string MainBrancheName)
 {
+	//This function returns the list of all sub - branches
 	list<component*> Branches;
 	findNodesWithName(HeadTree, MainBrancheName, Branches);
 	cout << "The Branches Are : \n" << endl;
 	auto ItStart = Branches.begin();
-	ItStart++; 
-	while (ItStart!=Branches.end())
+	ItStart++;
+	while (ItStart != Branches.end())
 	{
 		cout << "(" << (*ItStart)->x << "," << (*ItStart)->y << ")" << endl;
 		ItStart++;

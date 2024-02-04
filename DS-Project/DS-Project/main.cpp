@@ -148,13 +148,13 @@ flag:
 	}
 	else if (inputValue == "List-Brs")
 	{
-	system("cls");
-	cout << "Enter The Name Of The Main Branch  : \n" << endl;
-	cin >> name; 
-	kdTree.ListBrs(name); 
-	cout << "Press Any Key ..." << endl;
-	_getch();
-	goto flag;
+		system("cls");
+		cout << "Enter The Name Of The Main Branch  : \n" << endl;
+		cin >> name;
+		kdTree.ListBrs(name);
+		cout << "Press Any Key ..." << endl;
+		_getch();
+		goto flag;
 	}
 	else
 	{
